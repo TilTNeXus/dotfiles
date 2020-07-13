@@ -1,0 +1,7 @@
+
+xmonad.hs:248:1: warning: [-Wtabs]
+    Tab character found here, and in five further locations.
+    Please use spaces instead.
+    |
+248 |               spawnOnce "nitrogen --restore &"
+    | ^^^^^^^^
