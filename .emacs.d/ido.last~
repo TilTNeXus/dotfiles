@@ -1,0 +1,29 @@
+;;; -*- coding: utf-8 -*-
+
+;; ----- ido-last-directory-list -----
+(
+ ("/home/konner/" . "Desktop/")
+)
+
+;; ----- ido-work-directory-list -----
+(
+ "/home/konner/"
+ "/home/konner/Desktop/"
+)
+
+;; ----- ido-work-file-list -----
+(
+ "diy.txt"
+ ".directory"
+ ".emacs"
+)
+
+;; ----- ido-dir-file-cache -----
+(
+ ("/home/konner/" (24313 8898 702722 699000) "PS3/" "win32/" "Pictures/" ".PlayOnLinux/" "Documents/" ".java/" ".qjoypad3/" ".config/" "Downloads/" ".gnome/" ".fonts.conf" ".xinitrc" ".thunderbird/" ".lmmsrc.xml" ".emacs~" ".xinitrc~" ".bash_profile" "exdata/" ".face" ".xbindkeysrc.scm" ".bashrc" ".mozilla/" ".audacity-data/" "../" ".clonehero/" ".minecraft/" ".icons/" "Music/" "PlayOnLinux's virtual drives/" ".viminfo" ".thumbnails/" "Videos/" "VirtualBox VMs/" "sd/" ".fonts/" ".subversion/" ".pki/" ".Xauthority" ".wine/" "./" ".Xmodmap" ".local/" ".kde4/" "Public/" "mc.gamecontroller.amgp" ".face.icon" ".gnupg/" "ds.gamecontroller.amgp" "cruzerglide/" ".codelite/" "emacs/" ".cache/" "diy.txt~" ".bashrc~" ".bash_history" "Desktop/" ".emacs.d/" ".gtkrc-2.0" ".gnome2/" "mindpretzelreddit.txt" ".xbindkeyssrc.scm" "ps3.gamecontroller.amgp" "diy.txt" ".emacs" ".bash_logout" "Templates/")
+
+ ("/home/konner/Desktop/" (24305 6447 786153 282000) "../" ".directory" "./")
+)
+
+;; ----- ido-unc-hosts-cache -----
+t
