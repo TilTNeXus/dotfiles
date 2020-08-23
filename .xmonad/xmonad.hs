@@ -10,7 +10,7 @@ import XMonad.Util.SpawnOnce
 import XMonad.Util.Run
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
-
+import Graphics.X11.ExtraTypes.XF86
 
 import XMonad.Layout.LayoutModifier
 import XMonad.Layout.NoBorders (noBorders, smartBorders)
@@ -135,12 +135,13 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
     -- Restart xmonad
     , ((modm              , xK_q     ), spawn "xmonad --recompile; xmonad --restart")
+    , ((0, xF86XK_AudioLowerVolume), spawn "amixer set 'Master' 5%-")
+    , ((0, xF86XK_AudioRaiseVolume), spawn "amixer set 'Master' 5%+")
 
     -- Run xmessage with a summary of the default keybindings (useful for beginners)
     , ((modm .|. shiftMask, xK_slash ), spawn ("echo \"" ++ help ++ "\" | xmessage -file -"))
     ]
     ++
-
     --
     -- mod-[1..9], Switch to workspace N
     -- mod-shift-[1..9], Move client to workspace N
@@ -215,6 +216,7 @@ myLayout = smartBorders Full |||
 myManageHook = composeAll
     [ className =? "MPlayer"        --> doFloat
     , resource  =? "desktop_window" --> doIgnore
+    , className =? "Gimp"                         --> doFloat
     , resource  =? "kdesktop"       --> doIgnore ]
 
 ------------------------------------------------------------------------
@@ -250,7 +252,7 @@ myStartupHook = do
 	      spawnOnce "nm-applet &"
 	      spawnOnce "volumeicon &"
 	      spawnOnce "blueman-applet &"
-	      spawnOnce "trayer --edge top --align left --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 0 --tint 0x292d3e --height 22 &"
+	      spawnOnce "trayer --edge top --align left --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 145 --tint 0x292d3e --height 23 &"
 
 ------------------------------------------------------------------------
 -- Now run xmonad with all the defaults we set up.
@@ -258,7 +260,7 @@ myStartupHook = do
 -- Run xmonad with the settings you specify. No need to modify this.
 --
 main = do
-  xmproc <- spawnPipe "xmobar -x 0 /home/konner/.config/xmobar/xmobarrc.hs"
+  xmproc <- spawnPipe "xmobar -x 0 /home/konner/.config/xmobar/xmobar.hs"
   xmonad $ docks defaults
   xmonad $ ewmh def{ handleEventHook =
       handleEventHook def <+> fullscreenEventHook }
@@ -268,6 +270,8 @@ main = do
 --
 -- No need to modify this.
 --
+
+
 defaults = def {
       -- simple stuff
         terminal           = myTerminal,
