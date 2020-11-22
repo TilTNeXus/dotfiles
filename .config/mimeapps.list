@@ -1,0 +1,28 @@
+[Added Associations]
+application/octet-stream=emacs.desktop;
+audio/flac=vlc.desktop;
+audio/mpeg=vlc.desktop;
+audio/x-aiff=vlc.desktop;
+audio/x-mpegurl=emacs.desktop;
+audio/x-vorbis+ogg=vlc.desktop;
+audio/x-wav=vlc.desktop;
+image/jpeg=gimp.desktop;mirage.desktop;
+image/png=gimp.desktop;mirage.desktop;
+text/plain=emacs.desktop;
+video/mp4=org.kde.dragonplayer.desktop;vlc.desktop;
+application/vnd.oasis.opendocument.text=mirage.desktop;emacs.desktop;
+
+[Default Applications]
+audio/flac=vlc.desktop;
+audio/x-vorbis+ogg=vlc.desktop;
+audio/x-wav=vlc.desktop;
+image/jpeg=mirage.desktop;
+image/png=mirage.desktop;
+text/html=google-chrome.desktop
+text/plain=emacs.desktop;
+video/mp4=org.kde.dragonplayer.desktop;
+x-scheme-handler/discord-378347429537251328=discord-378347429537251328.desktop
+x-scheme-handler/http=brave-browser.desktop;
+x-scheme-handler/https=brave-browser.desktop;
+x-scheme-handler/mailto=thunderbird.desktop
+x-scheme-handler/discord-455712169795780630=discord-455712169795780630.desktop
