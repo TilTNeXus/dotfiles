@@ -248,11 +248,11 @@ myLogHook = return ()
 -- By default, do nothing.
 myStartupHook = do
 	      spawnOnce "nitrogen --restore &"
-	      spawnOnce "picom &"
+	      spawnOnce "picom --config /home/konner/.config/picom/picom.conf &"
 	      spawnOnce "nm-applet &"
 	      spawnOnce "volumeicon &"
 	      spawnOnce "blueman-applet &"
-	      spawnOnce "trayer --edge top --align left --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 145 --tint 0x292d3e --height 23 &"
+	      spawnOnce "trayer --edge top --align left --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 150 --tint 0x292d3e --height 23 &"
 
 ------------------------------------------------------------------------
 -- Now run xmonad with all the defaults we set up.
