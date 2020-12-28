@@ -5,7 +5,7 @@ Config { font    = "xft:Noto Sans:pixelsize=14:antialias=true:hinting=true"
        , bgColor = "#000000"
        , fgColor = "#B45BCF"
        , position = Top
-       , alpha = 153
+       , alpha = 200
        , lowerOnStart = True
        , hideOnStart = False
        , allDesktops = True
@@ -34,15 +34,15 @@ Config { font    = "xft:Noto Sans:pixelsize=14:antialias=true:hinting=true"
                                        -- charged status
                                        , "-i"	, "Charged: <left>%"
 			     ] 50
-		    , Run Weather "KGDJ" ["-t","<station>: <tempF>° F",
+		    , Run Weather "KGDJ" ["-t","<station>: <tempF> F",
                                           "-L","70","-H","90",
                                           "--normal","green",
                                           "--high","red",
                                           "--low","lightblue"] 5
                     , Run Volume "default" "Master" [] 1
-                    , Run ThermalZone 0 ["-t","<temp>° C"] 20
+                    , Run ThermalZone 0 ["-t","<temp> C"] 20
                     ]
        , sepChar = "%"
        , alignSep = "}{"
-       , template = " }{<fc=#b77bfc>%default:Master%</fc><fc=#666666>| </fc><fc=#b77bfc> %cpu% %thermal0% </fc><fc=#666666>| </fc><fc=#b77bfc>%memory% </fc><fc=#666666>| </fc><fc=#b77bfc>%battery% </fc><fc=#666666>| </fc><fc=#b77bfc>%KGDJ% </fc><fc=#666666>| </fc><fc=#b77bfc>%date%</fc> <fc=#666666>|</fc> <icon=xmonadlogo.xpm/>  "
+       , template = " }{<fc=#b77bfc>%default:Master%</fc><fc=#666666>| </fc><fc=#b77bfc> %cpu% %thermal0% </fc><fc=#666666>| </fc><fc=#b77bfc>%memory% </fc><fc=#666666>| </fc><fc=#b77bfc>%battery% </fc><fc=#666666>| </fc><fc=#b77bfc>%KGDJ% </fc><fc=#666666>| </fc><fc=#b77bfc>%date%</fc> <fc=#666666>|</fc> <action=`xdotool key super+r`><icon=haskell.xpm/></action>  "
              }
