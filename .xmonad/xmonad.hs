@@ -11,21 +11,45 @@ import XMonad.Util.Run
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
 import Graphics.X11.ExtraTypes.XF86
+import XMonad.Actions.MouseResize
+
 
 import XMonad.Layout.LayoutModifier
 import XMonad.Layout.NoBorders (noBorders, smartBorders)
 import XMonad.Layout.Fullscreen (fullscreenFull, fullscreenSupport)
-import XMonad.Layout.Grid (Grid(..))
+-- import XMonad.Layout.Grid (Grid(..))
 import XMonad.Layout.TwoPane (TwoPane(..))
 import XMonad.Layout.Tabbed (simpleTabbed)
 import XMonad.Layout.Spacing
 import XMonad.Layout.Spiral
+import XMonad.Layout.GridVariants (Grid(Grid))
+import XMonad.Layout.SimplestFloat
+import XMonad.Layout.ResizableTile
+import XMonad.Layout.Tabbed
+import XMonad.Layout.ThreeColumns
+import qualified XMonad.Layout.ToggleLayouts as T (toggleLayouts, ToggleLayout(Toggle))
+import XMonad.Layout.Renamed
+import XMonad.Layout.SubLayouts
+import XMonad.Layout.WindowNavigation
+import XMonad.Layout.LimitWindows (limitWindows, increaseLimit, decreaseLimit)
+import XMonad.Layout.ShowWName
+import XMonad.Layout.Simplest
+import XMonad.Layout.Magnifier
+import XMonad.Layout.MultiToggle (mkToggle, single, EOT(EOT), (??))
+import XMonad.Layout.MultiToggle.Instances (StdTransformers(NBFULL, MIRROR, NOBORDERS))
+import XMonad.Layout.WindowArranger (windowArrange, WindowArrangerMsg(..))
+
+
+myFont :: String
+myFont = "xft:SauceCodePro Nerd Font Mono:regular:size=9:antialias=true:hinting=true"
+
 
 -- The preferred terminal program, which is used in a binding below and by
 -- certain contrib modules.
-myTerminal      = "terminator"
+myTerminal      = "alacritty"
 myTextEditor       = "emacs"
-myWebBrowser      = "brave"
+myWebBrowser      = "firefox"
+myFileManager      = "thunar"
 -- Whether focus follows the mouse pointer.
 myFocusFollowsMouse :: Bool
 myFocusFollowsMouse = True
@@ -71,11 +95,15 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- launch gmrun
     , ((modm .|. shiftMask, xK_p     ), spawn "gmrun")
 
-     -- launch a web browser
+     -- launch my web browser
     , ((modm,               xK_b     ), spawn myWebBrowser)
 
-    --launch a text editor
+    --launch my text editor
     , ((modm,               xK_x     ), spawn myTextEditor)
+    
+    --launch my filemanager
+    , ((modm,               xK_f     ), spawn myFileManager)
+    
     -- close focused window
     , ((modm .|. shiftMask, xK_c     ), kill)
 
@@ -191,14 +219,105 @@ mySpacing i = spacingRaw False (Border i i i i) True (Border i i i i) True
 mySpacing' :: Integer -> l a -> XMonad.Layout.LayoutModifier.ModifiedLayout Spacing l a
 mySpacing' i = spacingRaw True (Border i i i i) True (Border i i i i) True
 
-myLayout = smartBorders Full |||
-  avoidStruts (
-      Grid
-  ||| spiral (6/7)
-  )
+-- myLayoutHook = avoidStruts (
+--           mySpacing 8 spiral (6/7)
+--           ) |||
+--           Grid |||
+--           smartBorders Full
 
-    
-------------------------------------------------------------------------
+tall     = renamed [Replace "tall"]
+           -- $ windowNavigation
+           -- $ addTabs shrinkText myTabTheme
+           $ subLayout [] (smartBorders Simplest)
+           $ limitWindows 12
+           $ mySpacing 8
+           $ ResizableTall 1 (3/100) (1/2) []
+--magnify  = renamed [Replace "magnify"]
+  --         $ windowNavigation
+    --       $ addTabs shrinkText myTabTheme
+      --     $ subLayout [] (smartBorders Simplest)
+        --   $ magnifier
+          -- $ limitWindows 12
+           -- $ mySpacing 8
+           -- $ ResizableTall 1 (3/100) (1/2) []
+monocle  = renamed [Replace "monocle"]
+           $ windowNavigation
+           $ addTabs shrinkText myTabTheme
+           $ subLayout [] (smartBorders Simplest)
+           $ limitWindows 20 Full
+--floats   = renamed [Replace "floats"]
+  --         $ windowNavigation
+    --       $ addTabs shrinkText myTabTheme
+      --     $ subLayout [] (smartBorders Simplest)
+        --   $ limitWindows 20 simplestFloat
+grid     = renamed [Replace "grid"]
+           -- $ windowNavigation
+           -- $ addTabs shrinkText myTabTheme
+           $ subLayout [] (smartBorders Simplest)
+           $ limitWindows 12
+           $ mySpacing 8
+           $ mkToggle (single MIRROR)
+           $ Grid (16/10)
+spirals  = renamed [Replace "spirals"]
+           -- $ windowNavigation
+           -- $ addTabs shrinkText myTabTheme
+           $ subLayout [] (smartBorders Simplest)
+           $ mySpacing' 8
+           $ spiral (6/7)
+threeCol = renamed [Replace "threeCol"]
+           -- $ windowNavigation
+           -- $ addTabs shrinkText myTabTheme
+           $ subLayout [] (smartBorders Simplest)
+           $ limitWindows 7
+           $ mySpacing' 4
+           $ ThreeCol 1 (3/100) (1/2)
+threeRow = renamed [Replace "threeRow"]
+           -- $ windowNavigation
+           -- $ addTabs shrinkText myTabTheme
+           $ subLayout [] (smartBorders Simplest)
+           $ limitWindows 7
+           $ mySpacing' 4
+           -- Mirror takes a layout and rotates it by 90 degrees.
+           -- So we are applying Mirror to the ThreeCol layout.
+           $ Mirror
+           $ ThreeCol 1 (3/100) (1/2)
+--tabs     = renamed [Replace "tabs"]
+           -- I cannot add spacing to this layout because it will
+           -- add spacing between window and tabs which looks bad.
+  --         $ tabbed shrinkText myTabTheme
+
+-- setting colors for tabs layout and tabs sublayout.
+myTabTheme = def { fontName            = myFont
+                 , activeColor         = "#46d9ff"
+                 , inactiveColor       = "#313846"
+                 , activeBorderColor   = "#46d9ff"
+                 , inactiveBorderColor = "#282c34"
+                 , activeTextColor     = "#282c34"
+                 , inactiveTextColor   = "#d0d0d0"
+                 }
+-- Theme for showWName which prints current workspace when you change workspaces.
+myShowWNameTheme :: SWNConfig
+myShowWNameTheme = def
+    { swn_font              = "xft:Noto Sans:bold:size=60"
+    , swn_fade              = 0.5
+    , swn_bgcolor           = "#1c1f24"
+    , swn_color             = "#b45bcf"
+    }
+
+--myLayoutHook = avoidStruts $ mouseResize $ windowArrange $ T.toggleLayouts -- floats
+  --             $ mkToggle (NBFULL ?? NOBORDERS ?? EOT) myDefaultLayout
+    --         where
+      --         myDefaultLayout = tall
+                                -- ||| magnify
+                                -- ||| noBorders monocle
+                                -- ||| floats
+                                -- ||| noBorders tabs
+                                -- ||| grid
+                                -- ||| spirals
+                                -- ||| threeCol
+                                -- ||| threeRow
+myLayoutHook = avoidStruts ( spirals ||| grid ) ||| smartBorders Full
+-----------------------------------------------------------------------
 -- Window rules:
 
 -- Execute arbitrary actions and WindowSet manipulations when managing
@@ -214,10 +333,10 @@ myLayout = smartBorders Full |||
 -- 'className' and 'resource' are used below.
 --
 myManageHook = composeAll
-    [ className =? "MPlayer"        --> doFloat
-    , resource  =? "desktop_window" --> doIgnore
-    , className =? "Gimp"                         --> doFloat
-    , resource  =? "kdesktop"       --> doIgnore ]
+  [ className =? "MPlayer"        --> doFloat
+  , resource  =? "desktop_window" --> doIgnore
+  , className =? "Gimp"                         --> doFloat
+  , resource  =? "kdesktop"       --> doIgnore ]
 
 ------------------------------------------------------------------------
 -- Event handling
@@ -246,13 +365,15 @@ myLogHook = return ()
 -- per-workspace layout choices.
 --
 -- By default, do nothing.
+myStartupHook :: X ()
 myStartupHook = do
-	      spawnOnce "nitrogen --restore &"
-	      spawnOnce "picom --config /home/konner/.config/picom/picom.conf &"
-	      spawnOnce "nm-applet &"
-	      spawnOnce "volumeicon &"
-	      spawnOnce "blueman-applet &"
-	      spawnOnce "trayer --edge top --align left --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 150 --tint 0x292d3e --height 23 &"
+              spawnOnce "nitrogen --restore &"
+              spawnOnce "picom --config /home/konner/.config/picom/picom.conf &"
+              spawnOnce "nm-applet &"
+              spawnOnce "volumeicon &"
+              spawnOnce "blueman-applet &"
+              spawnOnce "trayer --edge top --align left --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 102 --tint 0x000000 --height 23 &"
+              spawnOnce "/usr/bin/emacs --daemon &"
 
 ------------------------------------------------------------------------
 -- Now run xmonad with all the defaults we set up.
@@ -260,7 +381,7 @@ myStartupHook = do
 -- Run xmonad with the settings you specify. No need to modify this.
 --
 main = do
-  xmproc <- spawnPipe "xmobar -x 0 /home/konner/.config/xmobar/xmobar.hs"
+  xmproc0 <- spawnPipe "xmobar -x 0 /home/konner/.config/xmobar/xmobar.hs"
   xmonad $ docks defaults
   xmonad $ ewmh def{ handleEventHook =
       handleEventHook def <+> fullscreenEventHook }
@@ -282,13 +403,13 @@ defaults = def {
         workspaces         = myWorkspaces,
         normalBorderColor  = myNormalBorderColor,
         focusedBorderColor = myFocusedBorderColor,
-
-      -- key bindings
+        
+       -- key bindings
         keys               = myKeys,
         mouseBindings      = myMouseBindings,
 
       -- hooks, layouts
-        layoutHook         = myLayout,
+        layoutHook         = showWName' myShowWNameTheme $ myLayoutHook,
         manageHook         = myManageHook,
         handleEventHook    = myEventHook,
         logHook            = myLogHook,
