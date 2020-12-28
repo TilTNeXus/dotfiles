@@ -2,10 +2,10 @@
 -- install xmobar with these flags: --flags="with_alsa" --flags="with_mpd" --flags="with_xft"  OR --flags="all_extensions"
 Config { font    = "xft:Noto Sans:pixelsize=14:antialias=true:hinting=true"
        , additionalFonts = [ "xft:FontAwesome:pixelsize=13" ]
-       , bgColor = "#282A36"
+       , bgColor = "#000000"
        , fgColor = "#B45BCF"
        , position = Top
-       , alpha = 105
+       , alpha = 153
        , lowerOnStart = True
        , hideOnStart = False
        , allDesktops = True
