@@ -92,10 +92,10 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- launch dmenu
     , ((modm,               xK_p     ), spawn "dmenu_run")
 
-    -- launch gmrun
-    , ((modm .|. shiftMask, xK_p     ), spawn "gmrun")
+    --launch rofi run
+    , ((modm,               xK_r     ), spawn "rofi -show run")
 
-     -- launch my web browser
+        -- launch my web browser
     , ((modm,               xK_b     ), spawn myWebBrowser)
 
     --launch my text editor
@@ -163,8 +163,9 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
     -- Restart xmonad
     , ((modm              , xK_q     ), spawn "xmonad --recompile; xmonad --restart")
-    , ((0, xF86XK_AudioLowerVolume), spawn "amixer set 'Master' 5%-")
-    , ((0, xF86XK_AudioRaiseVolume), spawn "amixer set 'Master' 5%+")
+    , ((0, xF86XK_AudioLowerVolume), spawn "amixer sset 'Master' 5%-")
+    , ((0, xF86XK_AudioRaiseVolume), spawn "amixer sset 'Master' 5%+")
+    , ((0, xF86XK_AudioMute), spawn "amixer sset 'Master' toggle; amixer sset 'Speaker' toggle")
 
     -- Run xmessage with a summary of the default keybindings (useful for beginners)
     , ((modm .|. shiftMask, xK_slash ), spawn ("echo \"" ++ help ++ "\" | xmessage -file -"))
@@ -184,7 +185,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- mod-shift-{w,e,r}, Move client to screen 1, 2, or 3
     --
     [((m .|. modm, key), screenWorkspace sc >>= flip whenJust (windows . f))
-        | (key, sc) <- zip [xK_w, xK_e, xK_r] [0..]
+        | (key, sc) <- zip [xK_w, xK_e] [0..]
         , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
 
 
@@ -241,8 +242,8 @@ tall     = renamed [Replace "tall"]
            -- $ mySpacing 8
            -- $ ResizableTall 1 (3/100) (1/2) []
 monocle  = renamed [Replace "monocle"]
-           $ windowNavigation
-           $ addTabs shrinkText myTabTheme
+           -- $ windowNavigation
+           -- $ addTabs shrinkText myTabTheme
            $ subLayout [] (smartBorders Simplest)
            $ limitWindows 20 Full
 --floats   = renamed [Replace "floats"]
@@ -300,7 +301,7 @@ myShowWNameTheme :: SWNConfig
 myShowWNameTheme = def
     { swn_font              = "xft:Noto Sans:bold:size=60"
     , swn_fade              = 0.5
-    , swn_bgcolor           = "#1c1f24"
+    , swn_bgcolor           = "#222222"
     , swn_color             = "#b45bcf"
     }
 
@@ -372,7 +373,7 @@ myStartupHook = do
               spawnOnce "nm-applet &"
               spawnOnce "volumeicon &"
               spawnOnce "blueman-applet &"
-              spawnOnce "trayer --edge top --align left --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 102 --tint 0x000000 --height 23 &"
+              spawnOnce "trayer --edge top --align left --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 82 --tint 0x000000 --height 23 &"
               spawnOnce "/usr/bin/emacs --daemon &"
 
 ------------------------------------------------------------------------
