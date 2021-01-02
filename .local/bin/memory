@@ -1,0 +1,13 @@
+#!/bin/bash
+
+mem=`free -h | awk '/Mem:/ {printf $3 }' | sed 's/..$//'`
+units=`free -h | awk '/Mem:/ {printf $3 }'`
+unit=`echo ${units: -2:1}`
+
+if [ $unit  = 'G' ]; then
+    mem_perc=`free -h | awk '/Mem:/ { printf("%d\n", $3 / $2 * 100 + .5);}'`
+else
+    mem_perc=`free -h | awk '/Mem:/ { printf("%d\n", $3 / $2 / 10 + .5);}'`
+fi
+
+echo RAM: $mem $unit\B \($mem_perc\%\)\ 

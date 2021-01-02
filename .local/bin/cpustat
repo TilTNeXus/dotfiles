@@ -1,0 +1,8 @@
+#!/bin/bash
+
+temp=$(cat /sys/devices/virtual/thermal/thermal_zone0/temp)
+temp_deg=$(expr $temp / 1000)
+
+perc=$(top -bn 1 | awk '/^%Cpu/ {printf "%.f%%\n", $2+$4+$6}')
+
+echo CPU: $perc $temp_deg °C\ 
