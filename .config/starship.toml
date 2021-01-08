@@ -1,0 +1,22 @@
+add_newline = true
+
+format = '''
+\[$username@$hostname $directory\] \$ '''
+
+[username]
+show_always= true
+format = "[$user](bold purple)"
+
+[hostname]
+ssh_only = false
+format = "[$hostname](bold blue)"
+
+[directory]
+read_only = "🔒"
+truncation_length = 1
+format = "[$path](bold yellow) [$read_only](bold red)"
+[time]
+disabled = true
+use_12hr = true
+time_format = "%a %b %d %r"
+format = "at [$time](bold italic green)"
